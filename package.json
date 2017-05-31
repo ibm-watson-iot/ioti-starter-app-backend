@@ -1,0 +1,38 @@
+{
+  "name": "iot4i-starter-app-backend",
+  "version": "0.0.1",
+  "description": "Backend for the starter applications of IoT4I.",
+  "main": "app.js",
+  "engines": {
+    "node": ">=6.10.1"
+  },
+  "scripts": {
+    "start": "npm run linter && node app.js",
+    "linter": "./node_modules/.bin/eslint app.js src/** test/**",
+    "test": "./node_modules/mocha/bin/mocha test --recursive --reporter spec",
+    "test-build": "./node_modules/mocha/bin/mocha test --recursive --reporter xunit-file"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "^1.17.1",
+    "boom": "^4.2.0",
+    "cloudant": "^1.4.1",
+    "express": "^4.12.3",
+    "jsonschema": "^1.1.1",
+    "lodash": "^4.17.2",
+    "moment": "^2.11.1",
+    "pluralize": "^4.0.0",
+    "uuid": "^3.0.1",
+    "winston": "^2.1.1",
+    "when": "^3.7.4"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-airbnb-base": "^11.1.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-json": "^1.2.0",
+    "eslint-plugin-node": "^4.2.1"
+  }
+}

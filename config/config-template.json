@@ -1,0 +1,13 @@
+{
+  "services": {
+    "cloudantNoSQLDB": [{
+      "credentials": {
+        "username": "",
+        "password": "",
+        "host": "",
+        "port": 443,
+        "url": ""
+      }
+    }]
+  }
+}

@@ -1,0 +1,26 @@
+# Eclipse
+bin/
+**/.project
+.settings/
+.classpath
+.cache-main
+
+# IntelliJ
+.idea
+
+# Linux
+*~
+
+# Mac
+.DS_Store
+
+# NodeJS
+node_modules
+npm-debug.log
+
+temp/
+/xunit.xml
+/test/config/config-dev.json
+/.project
+
+/config/config-dev.json

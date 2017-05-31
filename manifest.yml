@@ -1,0 +1,12 @@
+applications:
+- name: iot4i-starter-app-backend
+  memory: 256M
+  disk_quota: 1024M
+  instances: 1
+  path: .
+  command: node app.js
+  timeout: 60
+  buildpack: sdk-for-nodejs
+  no-route: false
+  env:
+    NODE_MODULES_CACHE: false
