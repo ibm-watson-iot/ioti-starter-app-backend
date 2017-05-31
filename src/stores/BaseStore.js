@@ -12,10 +12,8 @@
 const uuidV4 = require('uuid/v4');
 const Cloudant = require('cloudant');
 const pluralize = require('pluralize');
-const logger = require('../utils/Logger');
+const logger = require('../utils/logger');
 const improvedRetry = require('../utils/improved-retry.js');
-
-const RETRY_ATTEMPTS = 10;
 
 class BaseStore {
 
@@ -23,6 +21,7 @@ class BaseStore {
     const method = 'BaseStore.constructor';
     this.limit = 20;
     this.maxLimit = 100;
+    this.designName = 'iot4i';
     const camelToDash = function(s) {
       return s.replace(/([A-Z])/g, ($1, p1, pos) => (pos > 0 ? '-' : '') + $1.toLowerCase());
     };
@@ -45,7 +44,7 @@ class BaseStore {
       account: dbCredentials.username,
       key: dbCredentials.username,
       password: dbCredentials.password,
-      plugin: improvedRetry({ retryAttempts: RETRY_ATTEMPTS })
+      plugin: improvedRetry({ retryAttempts: 10 })
     });
     this.db = cloudantDB.db.use(dbName);
     if (!this.db) {
@@ -74,6 +73,9 @@ class BaseStore {
       includeDocs: true
     }, queryOptions);
     let { skip, limit, includeDocs, descending } = queryOptions;
+    if ((typeof includeDocs === 'undefined') || (includeDocs === null)) {
+      includeDocs = true;
+    }
     if ((typeof skip === 'undefined') || (skip === null)) {
       skip = 0;
     }
@@ -91,12 +93,9 @@ class BaseStore {
       limit: limit,
       skip: skip
     };
-
     const viewName = pluralize(this.docType);
-    const connectionProvider = this.getConnectionProvider(tid);
-    const designName = connectionProvider.getDesignName();
 
-    return this.db.view(designName, viewName, viewOptions)
+    return this.db.view(this.designName, viewName, viewOptions)
       .then((resultOfView) => {
         const result = {
           offset: skip,

@@ -9,7 +9,7 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-const logger = require('../utils/Logger');
+const logger = require('../utils/logger');
 
 class BaseService {
 

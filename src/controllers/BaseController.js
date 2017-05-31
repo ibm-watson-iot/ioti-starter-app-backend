@@ -9,7 +9,8 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-const logger = require('../utils/Logger');
+const uuidV4 = require('uuid/v4');
+const logger = require('../utils/logger');
 
 const CLOUDANT_ERROR = 'CloudantNegativeResponse';
 
@@ -20,7 +21,7 @@ class BaseController {
   }
 
   get(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.get';
     const user = undefined;
     const docId = req.params[this.service.docType + 'Id'];
@@ -38,7 +39,7 @@ class BaseController {
   }
 
   list(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.list';
     const user = undefined;
     const queryOptions = {};
@@ -51,6 +52,7 @@ class BaseController {
     this.service.list(tid, user, queryOptions).then((results) => {
       res.send(results);
     }).catch((err) => {
+      console.log(err);
       if (err.name === CLOUDANT_ERROR) {
         res.status(err.details.statusCode).json({ message: err.details.error });
       } else {
@@ -60,7 +62,7 @@ class BaseController {
   }
 
   create(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.create';
     const user = undefined;
     const doc = req.params[this.service.docType];
@@ -78,7 +80,7 @@ class BaseController {
   }
 
   update(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.update';
     const user = undefined;
     const doc = req.params[this.service.docType];
@@ -98,7 +100,7 @@ class BaseController {
   }
 
   save(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.save';
     const user = undefined;
     const docToSave = req.params[this.service.docType];
@@ -118,7 +120,7 @@ class BaseController {
   }
 
   delete(req, res) {
-    const tid = req.headers['x-transaction-id'];
+    const tid = uuidV4();
     const method = 'BaseController.delete';
     const user = undefined;
     const docId = req.params[this.service.docType + 'Id'];

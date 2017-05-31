@@ -14,19 +14,22 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const logger = require('./src/utils/Logger');
-let config = require('./config/config-dev.json');
+const AppConfig = require('./src/utils/AppConfig');
 const UserController = require('./src/controllers/UserController');
 const ClaimController = require('./src/controllers/ClaimController');
 
-const props = {
-  appInfo: {},
-  appPort: 4000,
-  appHost: 'localhost',
+const requiredProperties = {
+  app: {},
+  port: 5000,
+  host: 'localhost',
   dbCredentials: undefined,
-  claimsDbName: 'claims'
+  dbName: 'iot4i-starter-app-db'
 };
 const noTid = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
-config = require('./appConfig.js').getConfig(props);
+
+const env = process.env.APP_ENV || 'dev';
+const configFilePath = `./config/config-${env}.json`;
+const appConfig = AppConfig.getConfig(requiredProperties, require(configFilePath));
 
 process.on('uncaughtException', (err) => {
   const errorId = uuidV4();
@@ -59,12 +62,12 @@ app.use((req, res, next) => {
 const apiRouter = express.Router();
 app.use('/api/v1', apiRouter);
 
-const userEndpoint = new UserController(config, apiRouter);
-const claimEndpoint = new ClaimController(config, apiRouter);
+const userEndpoint = new UserController(appConfig, apiRouter);
+const claimEndpoint = new ClaimController(appConfig, apiRouter);
 
-const server = app.listen(config.port, () => {
+const server = app.listen(appConfig.port, () => {
+  const method = 'app.listen';
   const port = server.address().port;
-  let host = server.address().address;
-  host = (host === '::' ? 'localhost' : host);
-  logger.info(noTid, 'app.listen', 'Backend is running at', 'https://' + host + ':' + port);
+  const host = (`${server.address().address === '::' ? 'localhost' : server.address().address}`);
+  logger.info(noTid, method, 'Starter-app-backend is starting at', `https://${host}:${port}`);
 });

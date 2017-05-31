@@ -38,7 +38,7 @@ const logger = new winston.Logger({
 
 function getMessage(argsObject) {
   const args = Array.prototype.slice.call(argsObject);
-  args.splice(0, 3);
+  args.splice(0, 2);
   args.forEach((arg, i) => {
     if (_.isObject(args[i])) {
       args[i] = JSON.stringify(args[i]);
