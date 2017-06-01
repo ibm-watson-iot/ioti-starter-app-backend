@@ -27,7 +27,10 @@
     "pluralize": "^4.0.0",
     "uuid": "^3.0.1",
     "winston": "^2.1.1",
-    "when": "^3.7.4"
+    "nodemailer": "^4.0.1",
+    "twilio": "^3.3.0",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   },
   "devDependencies": {
     "eslint": "^3.18.0",

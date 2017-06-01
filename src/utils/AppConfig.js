@@ -23,11 +23,17 @@ module.exports = {
    *        'dbCrendentials': undefined
    * }
    */
+
   getConfig: function(requiredProperties, configObj) {
     // In local testing of isolated components, it's convenient to use given config object.
     // However, in a real deployment, the config is read from environment values.
     return new AppConfig(requiredProperties, configObj);
-  }
+  },
+
+  loadConfig(requiredProperties, configObj) {
+    this.config = this.getConfig(requiredProperties, configObj);
+    return this.config;
+  },
 };
 
 

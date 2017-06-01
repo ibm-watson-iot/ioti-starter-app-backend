@@ -29,7 +29,7 @@ const noTid = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
 const env = process.env.APP_ENV || 'dev';
 const configFilePath = `./config/config-${env}.json`;
-const appConfig = AppConfig.getConfig(requiredProperties, require(configFilePath));
+const appConfig = AppConfig.loadConfig(requiredProperties, require(configFilePath));
 
 process.on('uncaughtException', (err) => {
   const errorId = uuidV4();
@@ -61,6 +61,7 @@ app.use((req, res, next) => {
 
 const apiRouter = express.Router();
 app.use('/api/v1', apiRouter);
+app.use('/api/v1/actions', require('./src/actions/action-routes'));
 
 const userEndpoint = new UserController(appConfig, apiRouter);
 const claimEndpoint = new ClaimController(appConfig, apiRouter);
