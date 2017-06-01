@@ -18,6 +18,13 @@ module.exports = {
       }
     }
   },
+  claims_by_hazardId: {
+    map: function(doc) {
+      if (doc.docType === 'claim') {
+        emit([doc.hazardId, doc.updatedAt], null);
+      }
+    }
+  },
   users: {
     map: function(doc) {
       if (doc.docType === 'user') {

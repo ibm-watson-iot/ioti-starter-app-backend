@@ -9,6 +9,7 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
+const logger = require('../utils/logger');
 const BaseService = require('./BaseService');
 const ClaimStore = require('../stores/ClaimStore');
 
@@ -18,6 +19,12 @@ class ClaimService extends BaseService {
     const docType = 'claim';
     const store = new ClaimStore(config.dbName, config.dbCredentials);
     super(store, docType);
+  }
+
+  listByHazardId(tid, user, hazardId, queryOptions) {
+    const method = 'ClaimService.listByHazardId';
+    logger.info(tid, method, 'Listing hazard by shieldId.');
+    return this.store.queryViewProperty(tid, 'hazardId', hazardId, queryOptions);
   }
 
 }

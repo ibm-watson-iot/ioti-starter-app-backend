@@ -13,7 +13,7 @@ const uuidV4 = require('uuid/v4');
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const logger = require('./src/utils/Logger');
+const logger = require('./src/utils/logger');
 const AppConfig = require('./src/utils/AppConfig');
 const UserController = require('./src/controllers/UserController');
 const ClaimController = require('./src/controllers/ClaimController');
@@ -63,8 +63,10 @@ const apiRouter = express.Router();
 app.use('/api/v1', apiRouter);
 app.use('/api/v1/actions', require('./src/actions/action-routes'));
 
+/*eslint-disable */
 const userEndpoint = new UserController(appConfig, apiRouter);
 const claimEndpoint = new ClaimController(appConfig, apiRouter);
+/*eslint-disable */
 
 const server = app.listen(appConfig.port, () => {
   const method = 'app.listen';

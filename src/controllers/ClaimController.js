@@ -9,8 +9,11 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
+const logger = require('../utils/logger');
 const BaseController = require('./BaseController');
 const ClaimService = require('../services/ClaimService');
+
+const CLOUDANT_ERROR = 'CloudantNegativeResponse';
 
 class ClaimController extends BaseController {
 
@@ -29,39 +32,39 @@ class ClaimController extends BaseController {
     router.delete(this.basePath, this.delete.bind(this));
   }
 
-  getClaimsByUsername(req, res) {
-    const method = 'ClaimController.getClaimsByUsername';
-    const path = 'GET ' + this.basePath + '/user/' + req.params.username;
-    console.info(method, 'Access to', path);
+  list(req, res) {
+    const tid = req.headers['x-transaction-id'];
+    const method = 'HazardController.list';
+    const user = undefined;
+    const queryOptions = {};
+    queryOptions.skip = req.params.skip;
+    queryOptions.limit = req.params.limit;
+    queryOptions.includeDocs = req.params.includeDocs;
+    queryOptions.descending = req.params.descending;
+    const hazardId = req.params.hazardId.value;
+    const userId = req.params.userId.value;
+    logger.info(tid, method, 'Access to GET', req.originalUrl);
 
-    const username = req.params.username;
-    if (!username) {
-      res.status(400).json({ error: 'username not given' });
+    let promise;
+    if (!(hazardId === undefined || hazardId === null)) {
+      promise = this.claimService.listByShieldId(tid, user, hazardId, queryOptions);
+    } else if (!(userId === undefined || userId === null)) {
+      promise = this.claimService.listByUserId(tid, user, userId, queryOptions);
     } else {
-      this.claimStore.getClaimsByUsername(username).then((docs) => {
-        res.send(docs);
-      }).catch((err) => {
-        res.status(502).json({ error: err.message });
-      });
+      promise = this.claimService.list(tid, user, queryOptions);
     }
+
+    promise.then((claims) => {
+      res.send(claims);
+    }).catch((err) => {
+      if (err.name === CLOUDANT_ERROR) {
+        res.status(err.details.statusCode).json({ message: err.details.error });
+      } else {
+        res.status(500).json({ message: 'Internal Server Error' });
+      }
+    });
   }
 
-  getClaimsByHazardId(req, res) {
-    const method = 'ClaimController.getClaimsByUsername';
-    const path = 'GET ' + this.basePath + '/hazard/' + req.params.hazardId;
-    console.info(method, 'Access to', path);
-
-    const hazardId = req.params.hazardId;
-    if (!hazardId) {
-      res.status(400).json({ error: 'hazardId not given' });
-    } else {
-      this.claimStore.getClaimsByHazardId(hazardId).then((docs) => {
-        res.send(docs);
-      }).catch((err) => {
-        res.status(502).json({ error: err.message });
-      });
-    }
-  }
 }
 
 module.exports = ClaimController;

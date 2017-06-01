@@ -193,6 +193,83 @@ class BaseStore {
       });
   }
 
+  queryViewProperty(tid, propertyName, propertyValue, queryOptions) {
+    let viewName = this.propertyViews[propertyName];
+    viewName = pluralize(this.docType) + '_' + viewName;
+    return this.queryView(tid, viewName, propertyValue, queryOptions);
+  }
+
+  queryViewMap(tid, propertyName, propertyValue, queryOptions) {
+    let viewName = this.mapViews[propertyName];
+    viewName = this.docType + '_' + viewName;
+    return this.queryView(tid, viewName, propertyValue, queryOptions);
+  }
+
+  queryView(tid, viewName, property, queryOptions) {
+    if (property !== undefined) {
+      queryOptions = Object.assign({
+        startKey: [property],
+        endKey: [property, {}],
+      }, queryOptions);
+    }
+    queryOptions = Object.assign({
+      skip: 0,
+      limit: 100,
+      includeDocs: true,
+      descending: false
+    }, queryOptions);
+    let { startKey, endKey, skip, limit, includeDocs, descending } = queryOptions;
+    const method = 'BaseStore.queryView';
+    if ((typeof skip === 'undefined') || (skip === null)) {
+      skip = 0;
+    }
+    if ((typeof limit === 'undefined') || (limit === null)) {
+      limit = this.limit;
+    } else if (limit > this.maxLimit) {
+      limit = this.maxLimit;
+    }
+
+    if (descending === true) {
+      [startKey, endKey] = [endKey, startKey];
+    }
+
+    logger.info(tid, method, 'Querying', this.docType,
+      'documents', 'viewName:', viewName, 'between', startKey, 'and', endKey,
+      'Skip:', skip, 'Limit:', limit, 'includeDocs:', includeDocs, 'descending:', descending);
+
+    const viewOptions = {
+      skip: skip,
+      limit: limit,
+      include_docs: includeDocs,
+      descending: descending,
+      reduce: false,
+      group: false
+    };
+    if (startKey !== undefined) {
+      viewOptions.startKey = startKey;
+    }
+    if (endKey !== undefined) {
+      viewOptions.endKey = endKey;
+    }
+    return this.db.view(this.designName, viewName, viewOptions)
+      .then((resultOfView) => {
+        const result = {
+          offset: skip,
+          limit: limit,
+          totalItems: 0,
+          items: []
+        };
+        resultOfView.rows.forEach((row) => {
+          result.items.push(row);
+        });
+        if (result.items.length <= limit) {
+          result.totalItems = result.items.length;
+        }
+        logger.info(tid, method, result.items.length, this.docType, 'documents are found.');
+        return result;
+      });
+  }
+
 }
 
 module.exports = BaseStore;
