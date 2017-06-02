@@ -8,7 +8,7 @@ stages:
           service_id: github_integrated
           parameters:
             repo_name: iot4i-starter-app-backend
-            repo_url: https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend/tree/toolchain-deploy
+            repo_url: https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend
             type: clone
             has_issues: false
 enable_traceability: true
