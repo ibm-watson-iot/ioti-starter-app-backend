@@ -2,8 +2,8 @@
 stages:
   - name: Build Stage
     inputs:
-      - type: git
-        branch: toolchain-deploy
+      - type: github
+        branch: master
     triggers:
       - type: commit
     jobs:
