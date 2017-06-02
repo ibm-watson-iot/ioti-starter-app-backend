@@ -11,7 +11,6 @@ stages:
             repo_url: https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend
             type: clone
             has_issues: false
-enable_traceability: true
     triggers:
       - type: commit
     jobs:
