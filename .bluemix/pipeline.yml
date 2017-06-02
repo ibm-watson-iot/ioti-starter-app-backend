@@ -2,8 +2,16 @@
 stages:
   - name: Build Stage
     inputs:
-      - type: github
+      - type: git
         branch: master
+        service:
+          service_id: github_integrated
+          parameters:
+            repo_name: iot4i-starter-app-backend
+            repo_url: https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend/tree/toolchain-deploy
+            type: clone
+            has_issues: false
+enable_traceability: true
     triggers:
       - type: commit
     jobs:
