@@ -30,7 +30,7 @@ enable_traceability: true
         script: |-
           #!/bin/bash
           cf create-service cloudantNoSQLDB Lite iot4i-starter-cloudantNoSQLDB
-          cf create-service iotf-service iotf-service-free iot4i-starter-iotf-service
+          cf create-service imfpush lite iot4i-imfpush
           cf create-service AdvancedMobileAccess "Graduated tier" iot4i-starter-app-id
           cf push "${CF_APP}"
           # View logs
