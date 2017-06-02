@@ -29,4 +29,11 @@ class UserController extends BaseController {
 
 }
 
-module.exports = UserController;
+let instance;
+
+module.exports = {
+  init: (config, router) => {
+    instance = new UserController(config, router);
+    return instance;
+  }
+};

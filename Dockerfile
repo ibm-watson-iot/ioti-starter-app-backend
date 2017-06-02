@@ -1,4 +1,4 @@
-FROM registry.ng.bluemix.net/ibmnode
+FROM node:6
 
 ENV HOME /home/iot4i
 RUN mkdir -p $HOME/iot4i-starter-app-backend
@@ -15,6 +15,6 @@ RUN sed -i 's/^PASS_MAX_DAYS.*/PASS_MAX_DAYS 90/' /etc/login.defs &&\
 
 USER iot4i
 
-EXPOSE 10010
+EXPOSE 10050
 
 CMD ["npm", "start"]

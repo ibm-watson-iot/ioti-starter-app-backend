@@ -25,8 +25,6 @@ class ClaimController extends BaseController {
 
     router.get(this.basePath, this.list.bind(this));
     router.get(this.basePath + '/:claimId', this.get.bind(this));
-    router.get(this.basePath + '/user/:username', this.getClaimsByUsername.bind(this));
-    router.get(this.basePath + '/hazard/:hazardId', this.getClaimsByHazardId.bind(this));
     router.post(this.basePath, this.create.bind(this));
     router.put(this.basePath, this.update.bind(this));
     router.delete(this.basePath, this.delete.bind(this));
@@ -46,9 +44,9 @@ class ClaimController extends BaseController {
     logger.info(tid, method, 'Access to GET', req.originalUrl);
 
     let promise;
-    if (!(hazardId === undefined || hazardId === null)) {
-      promise = this.claimService.listByShieldId(tid, user, hazardId, queryOptions);
-    } else if (!(userId === undefined || userId === null)) {
+    if (!hazardId) {
+      promise = this.claimService.listByHazardId(tid, user, hazardId, queryOptions);
+    } else if (!userId) {
       promise = this.claimService.listByUserId(tid, user, userId, queryOptions);
     } else {
       promise = this.claimService.list(tid, user, queryOptions);
@@ -67,4 +65,11 @@ class ClaimController extends BaseController {
 
 }
 
-module.exports = ClaimController;
+let instance;
+
+module.exports = {
+  init: (config, router) => {
+    instance = new ClaimController(config, router);
+    return instance;
+  }
+};

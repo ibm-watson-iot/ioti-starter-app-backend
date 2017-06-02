@@ -13,6 +13,7 @@ const uuidV4 = require('uuid/v4');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const setup = require('./src/utils/setup');
 const logger = require('./src/utils/logger');
 const AppConfig = require('./src/utils/AppConfig');
 const UserController = require('./src/controllers/UserController');
@@ -20,7 +21,7 @@ const ClaimController = require('./src/controllers/ClaimController');
 
 const requiredProperties = {
   app: {},
-  port: 5000,
+  port: 10050,
   host: 'localhost',
   dbCredentials: undefined,
   dbName: 'iot4i-starter-app-db'
@@ -63,14 +64,16 @@ const apiRouter = express.Router();
 app.use('/api/v1', apiRouter);
 app.use('/api/v1/actions', require('./src/actions/action-routes'));
 
-/*eslint-disable */
-const userEndpoint = new UserController(appConfig, apiRouter);
-const claimEndpoint = new ClaimController(appConfig, apiRouter);
-/*eslint-disable */
+UserController.init(appConfig, apiRouter);
+ClaimController.init(appConfig, apiRouter);
 
-const server = app.listen(appConfig.port, () => {
-  const method = 'app.listen';
-  const port = server.address().port;
-  const host = (`${server.address().address === '::' ? 'localhost' : server.address().address}`);
-  logger.info(noTid, method, 'Starter-app-backend is starting at', `https://${host}:${port}`);
+setup.createDatabase(appConfig.dbCredentials, appConfig.dbName).then(() => {
+  const server = app.listen(appConfig.port, () => {
+    const method = 'app.listen';
+    const port = server.address().port;
+    const host = (`${server.address().address === '::' ? 'localhost' : server.address().address}`);
+    logger.info(noTid, method, 'Starter-app-backend is starting at', `https://${host}:${port}`);
+  });
+}).catch((err) => {
+  logger.error(noTid, 'app.init', 'Database creation is failed.');
 });
