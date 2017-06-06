@@ -7,7 +7,7 @@
     "node": ">=6.10.1"
   },
   "scripts": {
-    "start": "npm run linter && node app.js",
+    "start": "node app.js",
     "linter": "./node_modules/.bin/eslint app.js src/** test/**",
     "test": "./node_modules/mocha/bin/mocha test --recursive --reporter spec",
     "test-build": "./node_modules/mocha/bin/mocha test --recursive --reporter xunit-file"

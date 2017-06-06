@@ -16,6 +16,10 @@ class ClaimStore extends BaseStore {
   constructor(dbName, dbCredentials) {
     super(dbName, dbCredentials);
     this.dbName = dbName;
+    this.propertyViews = {
+      userId: 'by_userId',
+      hazardId: 'by_hazardId'
+    };
   }
 
   getClaimsByUsername(username) {

@@ -12,6 +12,7 @@
 const uuidV4 = require('uuid/v4');
 const Cloudant = require('cloudant');
 const pluralize = require('pluralize');
+const utils = require('../utils/utils');
 const logger = require('../utils/logger');
 const improvedRetry = require('../utils/improved-retry.js');
 
@@ -117,7 +118,9 @@ class BaseStore {
   create(tid, newDocument) {
     const method = 'BaseStore.create';
     logger.info(tid, method, 'Creating new', this.docType, 'document');
-    newDocument.uuid = uuidV4();
+    if (!(newDocument._id && utils.isValidUuidv4(newDocument._id))) {
+      newDocument._id = uuidV4();
+    }
     newDocument.createdAt = Date.now();
     newDocument.updatedAt = newDocument.createdAt;
     newDocument.docType = this.docType;

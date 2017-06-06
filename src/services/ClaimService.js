@@ -23,8 +23,14 @@ class ClaimService extends BaseService {
 
   listByHazardId(tid, user, hazardId, queryOptions) {
     const method = 'ClaimService.listByHazardId';
-    logger.info(tid, method, 'Listing hazard by shieldId.');
+    logger.info(tid, method, 'Listing claims by shieldId.');
     return this.store.queryViewProperty(tid, 'hazardId', hazardId, queryOptions);
+  }
+
+  listByUserdId(tid, user, userId, queryOptions) {
+    const method = 'ClaimService.listByUserdId';
+    logger.info(tid, method, 'Listing claims by userId.');
+    return this.store.queryViewProperty(tid, 'userId', userId, queryOptions);
   }
 
 }

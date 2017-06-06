@@ -9,6 +9,8 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
+const uuidV4 = require('uuid/v4');
+
 const logger = require('../utils/logger');
 const BaseController = require('./BaseController');
 const ClaimService = require('../services/ClaimService');
@@ -31,22 +33,22 @@ class ClaimController extends BaseController {
   }
 
   list(req, res) {
-    const tid = req.headers['x-transaction-id'];
-    const method = 'HazardController.list';
+    const tid = uuidV4();
+    const method = 'ClaimController.list';
     const user = undefined;
     const queryOptions = {};
-    queryOptions.skip = req.params.skip;
-    queryOptions.limit = req.params.limit;
-    queryOptions.includeDocs = req.params.includeDocs;
-    queryOptions.descending = req.params.descending;
-    const hazardId = req.params.hazardId.value;
-    const userId = req.params.userId.value;
+    queryOptions.skip = req.query.skip;
+    queryOptions.limit = req.query.limit;
+    queryOptions.includeDocs = req.query.includeDocs;
+    queryOptions.descending = req.query.descending;
+    const hazardId = req.query.hazardId;
+    const userId = req.query.userId;
     logger.info(tid, method, 'Access to GET', req.originalUrl);
 
     let promise;
-    if (!hazardId) {
+    if (hazardId) {
       promise = this.claimService.listByHazardId(tid, user, hazardId, queryOptions);
-    } else if (!userId) {
+    } else if (userId) {
       promise = this.claimService.listByUserId(tid, user, userId, queryOptions);
     } else {
       promise = this.claimService.list(tid, user, queryOptions);

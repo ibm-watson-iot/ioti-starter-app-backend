@@ -25,6 +25,13 @@ module.exports = {
       }
     }
   },
+  claims_by_userId: {
+    map: function(doc) {
+      if (doc.docType === 'claim') {
+        emit([doc.userId, doc.updatedAt], null);
+      }
+    }
+  },
   users: {
     map: function(doc) {
       if (doc.docType === 'user') {
