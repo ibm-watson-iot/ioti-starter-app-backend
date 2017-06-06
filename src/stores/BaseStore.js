@@ -68,15 +68,8 @@ class BaseStore {
 
   list(tid, queryOptions) {
     const method = 'BaseStore.list';
-    queryOptions = Object.assign({
-      skip: 0,
-      limit: 100,
-      includeDocs: true
-    }, queryOptions);
-    let { skip, limit, includeDocs, descending } = queryOptions;
-    if ((typeof includeDocs === 'undefined') || (includeDocs === null)) {
-      includeDocs = true;
-    }
+    queryOptions = this._removeUndefined(queryOptions);
+    let { skip = 0, limit = 100, includeDocs = true } = queryOptions;
     if ((typeof skip === 'undefined') || (skip === null)) {
       skip = 0;
     }
@@ -90,10 +83,12 @@ class BaseStore {
 
     const viewOptions = {
       include_docs: includeDocs,
-      descending: descending,
       limit: limit,
       skip: skip
     };
+    if (queryOptions.descending !== undefined) {
+      viewOptions.descending = queryOptions.descending;
+    }
     const viewName = pluralize(this.docType);
 
     return this.db.view(this.designName, viewName, viewOptions)
@@ -104,13 +99,15 @@ class BaseStore {
           totalItems: resultOfView.total_rows,
           items: []
         };
-        resultOfView.rows.forEach((row) => {
-          if (row.doc._id.indexOf('_design') !== 0) {
-            result.items.push(row.doc);
-          }
-        });
+
+        if (includeDocs) {
+          result.items = resultOfView.rows.map(r => r.doc);
+        } else {
+          result.items = resultOfView.rows.map(r => r.id);
+        }
+
         logger.info(tid, method, result.items.length,
-            this.docType, 'documents are found.');
+          this.docType, 'documents are found.');
         return result;
       });
   }
@@ -208,20 +205,16 @@ class BaseStore {
     return this.queryView(tid, viewName, propertyValue, queryOptions);
   }
 
-  queryView(tid, viewName, property, queryOptions) {
-    if (property !== undefined) {
-      queryOptions = Object.assign({
-        startKey: [property],
-        endKey: [property, {}],
-      }, queryOptions);
-    }
-    queryOptions = Object.assign({
-      skip: 0,
-      limit: 100,
-      includeDocs: true,
-      descending: false
-    }, queryOptions);
-    let { startKey, endKey, skip, limit, includeDocs, descending } = queryOptions;
+  queryView(tid, viewName, property, queryOptions = {}) {
+    queryOptions = this._removeUndefined(queryOptions);
+    let {
+      startKey = (property !== undefined) ? [property] : undefined,
+      endKey = (property !== undefined) ? [property, {}] : undefined,
+      skip = 0,
+      limit = 100,
+      includeDocs = true,
+      descending = false
+    } = queryOptions;
     const method = 'BaseStore.queryView';
     if ((typeof skip === 'undefined') || (skip === null)) {
       skip = 0;
@@ -231,16 +224,17 @@ class BaseStore {
     } else if (limit > this.maxLimit) {
       limit = this.maxLimit;
     }
-
     if (descending === true) {
       [startKey, endKey] = [endKey, startKey];
     }
 
-    logger.info(tid, method, 'Querying', this.docType,
-      'documents', 'viewName:', viewName, 'between', startKey, 'and', endKey,
-      'Skip:', skip, 'Limit:', limit, 'includeDocs:', includeDocs, 'descending:', descending);
+    logger.info(tid, method, 'Querying', this.docType, 'documents', 'viewName:',
+      viewName, 'between', startKey, 'and', endKey, 'Skip:', skip, 'Limit:',
+      limit, 'includeDocs:', includeDocs, 'descending:', descending);
 
-    const viewOptions = {
+    let viewOptions = {
+      startkey: startKey,
+      endkey: endKey,
       skip: skip,
       limit: limit,
       include_docs: includeDocs,
@@ -248,12 +242,8 @@ class BaseStore {
       reduce: false,
       group: false
     };
-    if (startKey !== undefined) {
-      viewOptions.startKey = startKey;
-    }
-    if (endKey !== undefined) {
-      viewOptions.endKey = endKey;
-    }
+    viewOptions = this._removeUndefined(viewOptions);
+
     return this.db.view(this.designName, viewName, viewOptions)
       .then((resultOfView) => {
         const result = {
@@ -271,6 +261,13 @@ class BaseStore {
         logger.info(tid, method, result.items.length, this.docType, 'documents are found.');
         return result;
       });
+  }
+
+  _removeUndefined(options) {
+    return Object.keys(options).reduce((obj, k) => {
+      if (options[k] !== undefined) obj[k] = options[k];
+      return obj;
+    }, {});
   }
 
 }

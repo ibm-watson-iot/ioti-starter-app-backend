@@ -27,7 +27,7 @@ class ClaimService extends BaseService {
     return this.store.queryViewProperty(tid, 'hazardId', hazardId, queryOptions);
   }
 
-  listByUserdId(tid, user, userId, queryOptions) {
+  listByUserId(tid, user, userId, queryOptions) {
     const method = 'ClaimService.listByUserdId';
     logger.info(tid, method, 'Listing claims by userId.');
     return this.store.queryViewProperty(tid, 'userId', userId, queryOptions);
