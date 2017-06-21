@@ -23,8 +23,8 @@ class UserController extends BaseController {
     router.get(this.basePath, this.list.bind(this));
     router.get(this.basePath + '/:userId', this.get.bind(this));
     router.post(this.basePath, this.create.bind(this));
-    router.put(this.basePath, this.update.bind(this));
-    router.delete(this.basePath, this.delete.bind(this));
+    router.put(this.basePath + '/:userId', this.update.bind(this));
+    router.delete(this.basePath + '/:userId', this.delete.bind(this));
   }
 
 }

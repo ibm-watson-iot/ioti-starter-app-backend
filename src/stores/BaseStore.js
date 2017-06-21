@@ -115,9 +115,6 @@ class BaseStore {
   create(tid, newDocument) {
     const method = 'BaseStore.create';
     logger.info(tid, method, 'Creating new', this.docType, 'document');
-    if (!(newDocument._id && utils.isValidUuidv4(newDocument._id))) {
-      newDocument._id = uuidV4();
-    }
     newDocument.createdAt = Date.now();
     newDocument.updatedAt = newDocument.createdAt;
     newDocument.docType = this.docType;

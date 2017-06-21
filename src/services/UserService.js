@@ -11,6 +11,7 @@
 
 const BaseService = require('./BaseService');
 const UserStore = require('../stores/UserStore');
+const errors = require('../utils/errors');
 
 class UserService extends BaseService {
 
@@ -20,6 +21,15 @@ class UserService extends BaseService {
     super(store, docType);
   }
 
+  update(tid, user, docToUpdate) {
+    return super.update(tid, user, docToUpdate)
+    .catch((err) => {
+      if (err instanceof errors.CloudantNegativeResponse && err.details.statusCode === 404) {
+        return super.create(tid, user, docToUpdate);
+      }
+      throw err;
+    });
+  }
 }
 
 module.exports = UserService;

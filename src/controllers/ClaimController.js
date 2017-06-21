@@ -28,8 +28,8 @@ class ClaimController extends BaseController {
     router.get(this.basePath, this.list.bind(this));
     router.get(this.basePath + '/:claimId', this.get.bind(this));
     router.post(this.basePath, this.create.bind(this));
-    router.put(this.basePath, this.update.bind(this));
-    router.delete(this.basePath, this.delete.bind(this));
+    router.put(this.basePath + '/:claimId', this.update.bind(this));
+    router.delete(this.basePath + '/:claimId', this.delete.bind(this));
   }
 
   list(req, res) {
