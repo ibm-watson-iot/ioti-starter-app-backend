@@ -9,7 +9,7 @@ const appConfig = require('../utils/AppConfig').config;
 const router = express.Router();
 
 const actions = {
-  'email-action': require('./email-action')
+  'email-action': require('./email-action'),
   // 'phone-call-action': require('./phone-call-action'),
   // 'send-sms-action': require('./send-sms-action'),
   // 'push-action': require('./push-action'),
