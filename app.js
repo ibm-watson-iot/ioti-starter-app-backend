@@ -37,7 +37,8 @@ process.on('uncaughtException', (err) => {
   logger.error(noTid, method, 'Uncaught error. Error id', errorId, 'Stack:', err.stack);
 });
 
-const app = express();
+// global app required in websocket-action
+const app = express.app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -73,6 +74,8 @@ setup.createDatabase(appConfig.dbCredentials, appConfig.dbName).then(() => {
     const host = (`${server.address().address === '::' ? 'localhost' : server.address().address}`);
     logger.info(noTid, method, 'Starter-app-backend is starting at', `https://${host}:${port}`);
   });
+  // for websocket action
+  app.server = server;
 }).catch((err) => {
   logger.error(noTid, 'app.init', 'Database creation is failed.');
 });

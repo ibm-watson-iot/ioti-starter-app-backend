@@ -12,7 +12,8 @@ const actions = {
   'email-action': require('./email-action')
   // 'phone-call-action': require('./phone-call-action'),
   // 'send-sms-action': require('./send-sms-action'),
-  // 'push-action': require('./push-action')
+  // 'push-action': require('./push-action'),
+  'websocket-action': require('./websocket-action')
 };
 
 /**
