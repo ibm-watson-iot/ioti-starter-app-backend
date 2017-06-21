@@ -20,9 +20,8 @@ const UserController = require('./src/controllers/UserController');
 const ClaimController = require('./src/controllers/ClaimController');
 
 const requiredProperties = {
-  app: {},
   port: 10050,
-  host: 'localhost',
+  actions: undefined,
   dbCredentials: undefined,
   dbName: 'iot4i-starter-app-db'
 };
@@ -68,7 +67,7 @@ UserController.init(appConfig, apiRouter);
 ClaimController.init(appConfig, apiRouter);
 
 setup.createDatabase(appConfig.dbCredentials, appConfig.dbName).then(() => {
-  const server = app.listen(appConfig.port, () => {
+  const server = app.listen((process.env.PORT || appConfig.port), () => {
     const method = 'app.listen';
     const port = server.address().port;
     const host = (`${server.address().address === '::' ? 'localhost' : server.address().address}`);

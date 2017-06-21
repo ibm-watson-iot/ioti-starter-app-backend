@@ -1,0 +1,24 @@
+{
+  "actions": {
+    "email": {
+      "service": "gmail",
+      "url": null,
+      "port": null,
+      "username": "iot4insurance@gmail.com",
+      "password": "insurance_2017!!",
+      "fromName": "IoT for Insurance",
+      "from": "iot4insurance@gmail.com"
+    }
+  },
+  "services": {
+    "cloudantNoSQLDB": [{
+      "credentials": {
+        "username": "f8858f81-d312-4637-a83f-6c532dee9ee4-bluemix",
+        "password": "93f309f6641a3b600692a1b138831aa79b9ca0f073325383a96891325dfe1e87",
+        "host": "f8858f81-d312-4637-a83f-6c532dee9ee4-bluemix.cloudant.com",
+        "port": 443,
+        "url": "https://f8858f81-d312-4637-a83f-6c532dee9ee4-bluemix:93f309f6641a3b600692a1b138831aa79b9ca0f073325383a96891325dfe1e87@f8858f81-d312-4637-a83f-6c532dee9ee4-bluemix.cloudant.com"
+      }
+    }]
+  }
+}

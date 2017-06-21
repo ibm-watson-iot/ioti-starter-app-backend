@@ -24,22 +24,21 @@ module.exports = {
   },
 
   performAction(email) {
-    return this.userStore.get(email.tid, email.userId)
-      .then(function(toUser) {
-        // setup email data with unicode symbols
-        const mailOptions = {
-          from: `${this.config.email.fromName} <${this.config.email.name}>`,
-          to: toUser.email,
-          subject: email.subject,
-          text: email.text,
-          html: email.html
-        };
+    return this.userStore.get(email.tid, email.userId).then((toUser) => {
+      // setup email data with unicode symbols
+      const mailOptions = {
+        from: `${this.config.email.fromName} <${this.config.email.from}>`,
+        to: toUser.email,
+        subject: email.subject,
+        text: email.text,
+        html: email.html
+      };
 
-        // send mail with defined transport object
-        return this.transporter.sendMail(mailOptions)
-          .then((info) => {
-            console.log('Message %s sent: %s', info.messageId, info.response);
-          });
-      });
+      // send mail with defined transport object
+      return this.transporter.sendMail(mailOptions)
+        .then((info) => {
+          console.log('Message %s sent: %s', info.messageId, info.response);
+        });
+    });
   }
 };
