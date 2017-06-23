@@ -49,7 +49,7 @@ module.exports = {
         ws.on('pong', heartbeat);
       });
 
-      const interval = setInterval(() => {
+      setInterval(() => {
         wss.clients.forEach((ws) => {
           if (ws.isAlive === false) {
             const key = Object.keys(this.clientConnection).find((k) => {
@@ -62,7 +62,7 @@ module.exports = {
           }
 
           ws.isAlive = false;
-          ws.ping('', false, true);
+          return ws.ping('', false, true);
         });
       }, 30000);
 

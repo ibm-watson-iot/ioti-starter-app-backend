@@ -1,5 +1,5 @@
 applications:
-- name: iot4i-starter-app-backend
+- name: iot4i-starter-backend
   memory: 256M
   disk_quota: 1024M
   instances: 1

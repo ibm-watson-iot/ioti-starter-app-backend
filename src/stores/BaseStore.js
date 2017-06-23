@@ -1,5 +1,3 @@
-'use strict';
-
 /*******************************************************************************
  * Licensed Materials - Property of IBM
  * © Copyright IBM Corporation 2017. All Rights Reserved.
@@ -9,10 +7,10 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
-const uuidV4 = require('uuid/v4');
+'use strict';
+
 const Cloudant = require('cloudant');
 const pluralize = require('pluralize');
-const utils = require('../utils/utils');
 const logger = require('../utils/logger');
 const improvedRetry = require('../utils/improved-retry.js');
 

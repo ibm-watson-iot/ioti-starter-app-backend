@@ -38,7 +38,8 @@ process.on('uncaughtException', (err) => {
 });
 
 // global app required in websocket-action
-const app = express.app = express();
+express.app = express();
+const app = express.app;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
