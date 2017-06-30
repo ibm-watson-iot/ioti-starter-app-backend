@@ -6,5 +6,5 @@ eclipse {
     }
 }
 
-ext.dockerImageName = 'starter-app-backend'
+ext.dockerImageName = 'starter-backend'
 apply from: '../gradle/docker.gradle'
