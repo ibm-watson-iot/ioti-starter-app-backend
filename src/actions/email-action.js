@@ -1,7 +1,7 @@
 'use strict';
 
-const nodemailer = require('nodemailer');
 const Promise = require('bluebird');
+const nodemailer = require('nodemailer');
 const UserStore = require('../stores/UserStore');
 
 module.exports = {
@@ -23,22 +23,20 @@ module.exports = {
     this.transporter.sendMail = Promise.promisify(this.transporter.sendMail);
   },
 
-  performAction(email) {
-    return this.userStore.get(email.tid, email.userId).then((toUser) => {
+  performAction(payload) {
+    return this.userStore.get(payload.tid, payload.userId).then((toUser) => {
       // setup email data with unicode symbols
       const mailOptions = {
         from: `${this.config.email.fromName} <${this.config.email.from}>`,
         to: toUser.email,
-        subject: email.subject,
-        text: email.text,
-        html: email.html
+        subject: payload.actionParams.emailSubject,
+        text: payload.actionParams.emailText,
+        html: payload.actionParams.emailHtml
       };
-
       // send mail with defined transport object
-      return this.transporter.sendMail(mailOptions)
-        .then((info) => {
-          console.log('Message %s sent: %s', info.messageId, info.response);
-        });
+      return this.transporter.sendMail(mailOptions).then((info) => {
+        console.log('Message %s sent: %s', info.messageId, info.response);
+      });
     });
   }
 };

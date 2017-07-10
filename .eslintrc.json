@@ -5,13 +5,13 @@
   },
   "parserOptions": {
     "sourceType": "script",
-    "ecmaVersion": 2015
+    "ecmaVersion": 6
   },
   "extends": ["airbnb-base", "plugin:node/recommended"],
   "plugins": [
-      "import",
-      "json",
-      "node"
+    "import",
+    "json",
+    "node"
   ],
   "rules": {
     "arrow-body-style": "off",
@@ -33,6 +33,7 @@
     }],
     "max-len": ["error", 120],
     "object-shorthand": "off",
+    "prefer-arrow-callback": "off",
     "prefer-rest-params": "off",
     "spaced-comment": "off",
     "space-before-function-paren": ["error", "never"],

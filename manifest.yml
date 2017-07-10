@@ -1,5 +1,5 @@
 applications:
-- name: iot4i-starter-backend
+- name: staging-starter-backend
   memory: 256M
   disk_quota: 1024M
   instances: 1
@@ -10,5 +10,5 @@ applications:
   buildpack: sdk-for-nodejs
   no-route: false
   env:
-    APP_ENV: v2test
+    APP_ENV: myenv
     NODE_MODULES_CACHE: false

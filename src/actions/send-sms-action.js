@@ -1,35 +1,10 @@
 'use strict';
 
-
-const Twilio = require('twilio').Twilio;
 const Promise = require('bluebird');
+const Twilio = require('twilio').Twilio;
 const UserStore = require('../stores/UserStore');
 
 module.exports = {
-
-  send(user, payload) {
-    return this.client.sendMessage({
-      to: user.phonenumber,
-      from: this.config.twilio.fromPhoneNumber,
-      body: payload.smsText
-    });
-  },
-
-  run(payload) {
-    const promise = this.userStore.get(payload.tid, payload.userId);
-    return promise.then((user) => {
-      return this.send(user, payload);
-    });
-  },
-
-  performAction(payload) {
-    if (this.client) {
-      console.log(payload);
-      return this.run(payload);
-    } else {
-      return Promise.reject('client not setup');
-    }
-  },
 
   init(config) {
     this.userStore = new UserStore(config.dbName, config.dbCredentials);
@@ -42,5 +17,20 @@ module.exports = {
       console.warn('if you dont want to have the sms-action, remove it from the action-routes');
       console.error(e);
     }
+  },
+
+  performAction(payload) {
+    if (this.client) {
+      return this.userStore.get(payload.tid, payload.userId).then((toUser) => {
+        return this.client.sendMessage({
+          to: toUser.phonenumber,
+          from: this.config.twilio.fromPhoneNumber,
+          body: payload.actionParams.smsText
+        });
+      });
+    } else {
+      return Promise.reject('SMS action is not initialized.');
+    }
   }
+
 };
