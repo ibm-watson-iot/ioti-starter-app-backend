@@ -23,8 +23,8 @@ class UserStore extends BaseStore {
     var trimmedUser = {
       _id: user._id,
       _rev: user._rev,
-      name: user.name ? user.name : user.cn,
-      email: user.email ? user.email :user.emailAddress,
+      name: user.name ? user.name : decodeURIComponent(user.cn),
+      email: user.email ? user.email : user.emailAddress,
       address: user.address
     };
 
