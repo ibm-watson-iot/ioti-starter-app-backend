@@ -25,6 +25,8 @@ class UserStore extends BaseStore {
       _rev: user._rev,
       name: user.name ? user.name : decodeURIComponent(user.cn),
       email: user.email ? user.email : user.emailAddress,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
       address: user.address
     };
 
