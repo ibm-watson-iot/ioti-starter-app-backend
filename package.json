@@ -1,7 +1,13 @@
 {
-  "name": "iot4i-starter-app-backend",
-  "version": "0.0.1",
+  "name": "ioti-starter-app-backend",
+  "author": "IBM IoT for Insurance Team",
+  "license": "EPL-1.0",
+  "version": "1.0.0",
   "description": "Backend for the starter applications of IoT4I.",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ibm-watson-iot/ioti-starter-app-backend.git"
+  },
   "main": "app.js",
   "engines": {
     "node": ">=6.10.1"
@@ -12,8 +18,6 @@
     "test": "./node_modules/mocha/bin/mocha test --recursive --reporter spec",
     "test-build": "./node_modules/mocha/bin/mocha test --recursive --reporter xunit-file"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bluebird": "^3.4.1",
     "body-parser": "^1.17.1",
