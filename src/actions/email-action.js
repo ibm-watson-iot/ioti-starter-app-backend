@@ -16,8 +16,8 @@ module.exports = {
       host: config.email.url,
       port: config.email.port * 1,
       auth: {
-        user: config.email.username,
-        pass: config.email.password
+        user: config.email.authUser,
+        pass: config.email.authPassword
       }
     });
     this.transporter.sendMail = Promise.promisify(this.transporter.sendMail);
@@ -31,7 +31,7 @@ module.exports = {
         to: toUser.email,
         subject: payload.actionParams.emailSubject,
         text: payload.actionParams.emailText,
-        html: payload.actionParams.emailHtml
+        html: '<b>Hello, <strong>{{username}}</strong>, Your password is:\\n<b>{{ password }}</b></p>'
       };
       // send mail with defined transport object
       return this.transporter.sendMail(mailOptions).then((info) => {
