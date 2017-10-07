@@ -3,6 +3,28 @@
 const Promise = require('bluebird');
 const nodemailer = require('nodemailer');
 const UserStore = require('../stores/UserStore');
+const pug = require('pug');
+const path = require('path');
+
+const compileEmailTemplate = pug.compileFile(path.join(__dirname, 'email.pug'), {
+  cache: true
+});
+
+function prepareEmailHtml(user, hazard) {
+  return compileEmailTemplate({
+    userName: `${(user) ? user.name : ''}`,
+    hazardTitle: `${(hazard.actionParams) ? hazard.actionParams.hazardTitle : ''}`,
+    hazardTime: `${(hazard.rawEvents && hazard.rawEvents.length !== 0) ?
+      hazard.rawEvents[0].arrivedAtMH.substring(0, 10) : 'No hazard time found'}`,
+    hazardDetails: `Shield Id: ${hazard.shieldId}`,
+    locationType: ' GeoJson',
+    locations: `${(hazard.rawEvents) ?
+      JSON.stringify(hazard.rawEvents.map(event => event.location.geometry.coordinates)) : 'No locations found'}`,
+    eventsNumber: (hazard.rawEvents) ? hazard.rawEvents.length : 0,
+    hazardEvents: `${(hazard.rawEvents) ?
+      JSON.stringify(hazard.rawEvents.map(event => event.event)) : 'No events found'}`
+  });
+}
 
 module.exports = {
 
@@ -31,7 +53,7 @@ module.exports = {
         to: toUser.email,
         subject: payload.actionParams.emailSubject,
         text: payload.actionParams.emailText,
-        html: '<b>Hello, <strong>{{username}}</strong>, Your password is:\\n<b>{{ password }}</b></p>'
+        html: prepareEmailHtml(toUser, payload)
       };
       // send mail with defined transport object
       return this.transporter.sendMail(mailOptions).then((info) => {
