@@ -11,18 +11,30 @@ const compileEmailTemplate = pug.compileFile(path.join(__dirname, 'email.pug'), 
 });
 
 function prepareEmailHtml(user, hazard) {
+  let locations = [];
+  let hazardTime = 'No hazard time found';
+  let eventsNumber = 0;
+  let hazardEvents = [];
+  if (hazard.rawEvents) {
+    locations = hazard.rawEvents.map((event) => {
+      return {
+        coordinates: event.location.geometry.coordinates
+      };
+    });
+    hazardTime = `${(hazard.rawEvents.length !== 0) ?
+      new Date(hazard.rawEvents[0].arrivedAtMH).toUTCString() : 'No hazard time found'}`;
+    eventsNumber = hazard.rawEvents.length;
+    hazardEvents = hazard.rawEvents.map(event => JSON.stringify(event.event, null, 4));
+  }
   return compileEmailTemplate({
-    userName: `${(user) ? user.name : ''}`,
+    userName: user.name,
     hazardTitle: `${(hazard.actionParams) ? hazard.actionParams.hazardTitle : ''}`,
-    hazardTime: `${(hazard.rawEvents && hazard.rawEvents.length !== 0) ?
-      hazard.rawEvents[0].arrivedAtMH.substring(0, 10) : 'No hazard time found'}`,
+    hazardTime: hazardTime,
     hazardDetails: `Shield Id: ${hazard.shieldId}`,
-    locationType: ' GeoJson',
-    locations: `${(hazard.rawEvents) ?
-      JSON.stringify(hazard.rawEvents.map(event => event.location.geometry.coordinates)) : 'No locations found'}`,
-    eventsNumber: (hazard.rawEvents) ? hazard.rawEvents.length : 0,
-    hazardEvents: `${(hazard.rawEvents) ?
-      JSON.stringify(hazard.rawEvents.map(event => event.event)) : 'No events found'}`
+    locationType: ' Coordinates [Lat,Lng]',
+    locations: JSON.stringify(locations, null, 4),
+    eventsNumber: eventsNumber,
+    hazardEvents: hazardEvents
   });
 }
 
