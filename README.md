@@ -3,7 +3,7 @@
 #### How to run in Bluemix
 ##### Deploy through Bluemix devOps
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend&branch=master&repository_token=aafc38697738b58a52aa3647cc452c1c6219089c)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/MaeveOReilly/ioti-starter-app-backend)
 
 #### How to run locally
 1. Create a config file under `config` directory with a name `config-dev.json`. You can use the template file `/config/config-template.json`.
