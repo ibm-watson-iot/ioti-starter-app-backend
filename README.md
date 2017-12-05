@@ -3,8 +3,7 @@
 #### How to run in Bluemix
 ##### Deploy through Bluemix devOps
 
-[![Create toolchain](https://console.w3ibm.bluemix.net/devops/graphics/create_toolchain_button.png)](https://console.w3ibm.bluemix.net/devops/setup/deploy?repository=https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend)
-(creates a new Toolchain and Delivery Pipeline for deployment)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend)
 
 
 #### How to run locally
