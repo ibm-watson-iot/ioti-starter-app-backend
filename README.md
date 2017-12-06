@@ -1,7 +1,7 @@
 ### Backend for the starter applications of IoT4I
 
-#### How to run in Bluemix
-##### Deploy through Bluemix devOps
+#### How to run in IBM Cloud
+##### Deploy through IBM Cloud Continuous Delivery
 
 [![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/MaeveOReilly/ioti-starter-app-backend)
 
@@ -21,5 +21,5 @@ This repo has also some example actions that can be configured with IoT4i. The a
 - Email action which uses nodemailer to send emails. An html email template was designed using https://beefree.io/ and converted to [pug](https://pugjs.org). The template accepts hazard information like shieldId, locations and events from the email action. 
 - Phone call action which uses [twilio](https://www.twilio.com) to call phone number.
 - Send sms action which uses [twilio](https://www.twilio.com) to sends sms to a phone number.
-- Push action which uses bluemix push notification to send alerts.
+- Push action which uses IBM Cloud push notification to send alerts.
 - Websocket action to send websocket notifications to browser. 
