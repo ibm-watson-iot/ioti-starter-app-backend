@@ -3,7 +3,7 @@
 #### How to run in IBM Cloud
 ##### Deploy through IBM Cloud Continuous Delivery
 
-[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-iot/ioti-starter-app-backend)
+[![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-iot/ioti-starter-app-backend&branch=bug-fix-build)
 
 #### How to run locally
 1. Create a config file under `config` directory with a name `config-dev.json`. You can use the template file `/config/config-template.json`.
