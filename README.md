@@ -5,6 +5,8 @@
 
 [![Deploy to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/ibm-watson-iot/ioti-starter-app-backend)
 
+[![Deploy Local Branch to IBM Cloud](https://bluemix.net/deploy/button.png)](https://bluemix.net/deploy?repository=https://github.com/MaeveOReilly/ioti-starter-app-backend&branch=bug-fix-deploy-stage)
+
 #### How to run locally
 1. Create a config file under `config` directory with a name `config-dev.json`. You can use the template file `/config/config-template.json`.
 2. Start the Nodejs application `node app.js`
