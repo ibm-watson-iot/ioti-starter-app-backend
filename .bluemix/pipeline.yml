@@ -8,7 +8,7 @@ stages:
           service_id: github_integrated
           parameters:
             repo_name: iot4i-starter-app-backend
-            repo_url: https://github.ibm.com/IoT-Insurance/iot4i-starter-app-backend
+            repo_url: https://github.com/ibm-watson-iot/ioti-starter-app-backend
             type: clone
             has_issues: false
     triggers:
@@ -29,12 +29,10 @@ stages:
         script: |-
           #!/bin/bash
           cf create-service cloudantNoSQLDB Lite iot4i-starter-cloudantNoSQLDB
-          cf create-service imfpush lite iot4i-imfpush
-          cf create-service AdvancedMobileAccess "Graduated tier" iot4i-starter-app-id
-          cf push "${CF_APP}"
-          # View logs
-          cf logs "${CF_APP}" --recent
-
+          cf push "${CF_APP}" --no-start
+          cf bind-service "${CF_APP}" iot4i-starter-cloudantNoSQLDB
+          cf restage "${CF_APP}"
+          cf start "${CF_APP}"
         target:
           organization: ${CF_ORGANIZATION}
           space: ${CF_SPACE}

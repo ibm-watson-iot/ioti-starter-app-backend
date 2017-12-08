@@ -1,0 +1,33 @@
+{
+  "actions": {
+    "email": {
+      "service": "",
+      "url": "",
+      "port": "",
+      "authUser": "",
+      "authPassword": "",
+      "fromName": "",
+      "from": ""
+    },
+    "twilio": {
+      "username": "",
+      "password": "",
+      "fromPhoneNumber": ""
+    },
+    "push": {
+      "url": "",
+      "appSecret": ""
+    }
+  },
+  "services": {
+    "cloudantNoSQLDB": [{
+      "credentials": {
+        "username": "",
+        "password": "",
+        "host": "",
+        "port": 443,
+        "url": ""
+      }
+    }]
+  }
+}
