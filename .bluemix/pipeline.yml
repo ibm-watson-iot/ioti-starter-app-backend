@@ -26,10 +26,9 @@ stages:
     jobs:
       - name: Deploy to dev
         type: deployer
-        env:
-          APP_ENV: template
         script: |-
           #!/bin/bash
+          export APP_ENV=template
           cf create-service cloudantNoSQLDB Lite iot4i-starter-cloudantNoSQLDB
           sed -i  "s/myenv/$APP_ENV/g" manifest.yml
           cf push "${CF_APP}" --no-start
