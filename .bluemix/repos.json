@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "messages": {
+       "$i18n": "locales.yml"
+    },
+    "title": {
+      "$ref": "#/messages/github.title"
+    },
+    "description": {
+      "$ref": "#/messages/github.description"
+    },
+    "longDescription": {
+      "$ref": "#/messages/github.longDescription"
+    },
+    "type": "object",
+    "properties": {
+        "backend-repo_name": {
+            "type": "string"
+        },
+        "backend-repo_url": {
+            "type": "string"
+        },
+        "dashboard-repo_name": {
+            "type": "string"
+        },
+        "dashboard-repo_url": {
+            "type": "string"
+        },
+        "policy-holder-repo_name": {
+            "type": "string"
+        },
+        "policy-holder-repo_url": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "backend-repo_name",
+        "backend-repo_url",
+        "dashboard-repo_name",
+        "dashboard-repo_url",
+        "policy-holder-repo_name",
+        "policy-holder-repo_url"
+    ],
+    "form": [
+        {
+            "type": "validator",
+            "url": "/devops/setup/bm-helper/custom_github_helper.html"
+        },
+        {
+            "type": "table",
+            "columnCount": 3,
+            "widths": [
+                "47%",
+                "6%",
+                "47%"
+            ],
+            "items": [
+                {
+                    "type": "label",
+                    "title": {
+                        "$ref": "#/messages/github.sourceRepository"
+                    }
+                },
+                {
+                    "type": "label",
+                    "title": ""
+                },
+                {
+                    "type": "label",
+                    "title": {
+                        "$ref": "#/messages/github.targetRepository"
+                    }
+                },
+                {
+                    "type": "text",
+                    "key": "dashboard-repo_url"
+                },
+                {
+                    "type": "icon",
+                    "iconType": "right_arrow"
+                },
+                {
+                    "type": "text",
+                    "key": "dashboard-repo_name"
+                },
+                {
+                    "type": "text",
+                    "key": "backend-repo_url"
+                },
+                {
+                    "type": "icon",
+                    "iconType": "right_arrow"
+                },
+                {
+                    "type": "text",
+                    "key": "backend-repo_name"
+                },
+                {
+                    "type": "text",
+                    "key": "policy-holder-repo_url"
+                },
+                {
+                    "type": "icon",
+                    "iconType": "right_arrow"
+                },
+                {
+                    "type": "text",
+                    "key": "policy-holder-repo_name"
+                }
+            ]
+        }
+    ]
+}

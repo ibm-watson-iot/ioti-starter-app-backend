@@ -1,0 +1,40 @@
+---
+stages:
+  - name: Build Stage
+    inputs:
+      - type: git
+        branch: master
+        service: ${BACKEND_REPO}
+    triggers:
+      - type: commit
+    jobs:
+      - name: Build
+        type: builder
+  - name: Deploy Stage
+    inputs:
+      - type: job
+        stage: Build Stage
+        job: Build
+    triggers:
+      - type: stage
+    properties:
+      - name: ENV
+        value: staging
+        type: text
+    jobs:
+      - name: Deploy to dev
+        type: deployer
+        script: |-
+          #!/bin/bash
+          sed -i  "s/myenv/${ENV}/g" manifest.yml
+          cp config/config-template.json config/config-${ENV}.json
+          cf create-service cloudantNoSQLDB Lite iot4i-starter-cloudantNoSQLDB
+          cf push "${CF_APP}" --no-start
+          cf bind-service "${CF_APP}" iot4i-starter-cloudantNoSQLDB
+          cf start "${CF_APP}"
+        target:
+          region_id: ${STAGING_REGION_ID}
+          organization: ${STAGING_ORG_NAME}
+          space: ${STAGING_SPACE_NAME}
+          application: ${CF_APP_NAME}
+

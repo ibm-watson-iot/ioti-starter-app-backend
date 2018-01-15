@@ -1,0 +1,133 @@
+version: '2'
+messages:
+  $i18n: locales.yml
+template:
+  name:
+    $ref: "#/messages/template.name"
+  description:
+    $ref: "#/messages/template.description"
+  required:
+    - policy-holder-build
+    - backend-build
+    - dashboard-build
+    - backend-repo
+    - dashboard-repo
+    - policy-holder-repo
+  info:
+    git url: >-
+      [https://github.com/ibm-watson-iot](https://github.com/ibm-watson-iot)
+toolchain:
+  template:
+    getting_started:
+      $ref: "#/messages/template.gettingStarted"
+  name: 'ioti-{{timestamp}}'
+services:
+  dashboard-build:
+    service_id: pipeline
+    parameters:
+      services:
+        - dashboard-repo
+      name: 'dashboard-{{toolchain.name}}'
+      configuration:
+        content:
+          $ref: dashboard.pipeline.yml
+          $refType: text
+        env:
+          DASHBOARD_REPO: dashboard-repo
+          CF_APP_NAME: '{{form.pipeline.parameters.dashboard-app-name}}'
+          BACKEND_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
+          STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
+          STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
+          STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
+          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
+          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+        execute: true
+  backend-repo:
+    service_id: hostedgit
+    parameters:
+      repo_name: '{{form.hostedgit.parameters.backend-repo_name}}'
+      repo_url: '{{form.hostedgit.parameters.backend-repo_url}}'
+      type: clone
+      has_issues: false
+      enable_traceability: true
+  policy-holder-repo:
+    service_id: hostedgit
+    parameters:
+      repo_name: '{{form.hostedgit.parameters.policy-holder-repo_name}}'
+      repo_url: '{{form.hostedgit.parameters.policy-holder-repo_url}}'
+      type: clone
+      has_issues: true
+      enable_traceability: true
+  policy-holder-build:
+    service_id: pipeline
+    parameters:
+      services:
+        - policy-holder-repo
+      name: 'policy-holder-{{toolchain.name}}'
+      policy-holder-pipeline: true
+      configuration:
+        content:
+          $ref: policy-holder.pipeline.yml
+          $refType: text
+        env:
+          POLICY_HOLDER_REPO: policy-holder-repo
+          CF_APP_NAME: '{{form.pipeline.parameters.policy-holder-app-name}}'
+          BACKEND_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
+          STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
+          STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
+          STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
+          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
+          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+        execute: true
+  backend-build:
+    service_id: pipeline
+    parameters:
+      services:
+        - backend-repo
+      name: 'backend-{{toolchain.name}}'
+      configuration:
+        content:
+          $ref: backend.pipeline.yml
+          $refType: text
+        env:
+          BACKEND_REPO: backend-repo
+          CF_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
+          STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
+          STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
+          STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
+          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
+          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
+          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
+        execute: true
+  dashboard-repo:
+    service_id: hostedgit
+    parameters:
+      repo_name: '{{form.hostedgit.parameters.dashboard-repo_name}}'
+      repo_url: '{{form.hostedgit.parameters.dashboard-repo_url}}'
+      type: clone
+      has_issues: false
+      enable_traceability: true
+  webide:
+    service_id: orion
+form:
+  pipeline:
+    parameters:
+      staging-space: staging
+      prod-space: prod
+      dashboard-app-name: '{{services.dashboard-repo.parameters.repo_name}}'
+      backend-app-name: '{{services.backend-repo.parameters.repo_name}}'
+      policy-holder-app-name: '{{services.policy-holder-repo.parameters.repo_name}}'
+    schema:
+      $ref: deploy.json
+  hostedgit:
+    parameters:
+      backend-repo_name: 'backend-{{toolchain.name}}'
+      backend-repo_url: 'https://github.com/ibm-watson-iot/ioti-starter-app-backend'
+      dashboard-repo_name: 'dashboard-{{toolchain.name}}'
+      dashboard-repo_url: 'https://github.com/ibm-watson-iot/ioti-insurance-dashboard'
+      policy-holder-repo_name: 'policy-holder-{{toolchain.name}}'
+      policy-holder-repo_url: 'https://github.com/ibm-watson-iot/ioti-policy-holder-app'
+    schema:
+      $ref: repos.json
