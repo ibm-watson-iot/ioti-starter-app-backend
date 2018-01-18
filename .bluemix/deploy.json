@@ -26,6 +26,14 @@
             "description": "The bluemix space",
             "type": "string"
         },
+        "tenant-id": {
+           "description": {
+                "$ref": "#/messages/deploy.tenantDescription"
+            },
+           "type": "string",
+           "pattern": "\\S",
+           "maxLength": 63
+        },
         "dashboard-app-name": {
             "description": {
                 "$ref": "#/messages/deploy.appDescription1"
@@ -55,6 +63,7 @@
         "staging-region",
         "staging-organization",
         "staging-space",
+        "tenant-id",
         "dashboard-app-name",
         "backend-app-name",
         "policy-holder-app-name"
@@ -63,6 +72,14 @@
         {
             "type": "validator",
             "url": "/devops/setup/bm-helper/helper.html"
+        },
+        {
+            "type": "text",
+            "readonly": false,
+            "title": {
+                "$ref": "#/messages/deploy.tenantId"
+            },
+            "key": "tenant-id"
         },
         {
             "type": "text",
@@ -138,7 +155,7 @@
                     "type": "select",
                     "key": "staging-space",
                     "readonly": false
-                }
+                },
             ]
         }
     ]

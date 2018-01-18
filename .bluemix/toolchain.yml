@@ -33,6 +33,7 @@ services:
           $ref: dashboard.pipeline.yml
           $refType: text
         env:
+          TENANT_ID: '{{form.pipeline.parameters.tenant-id}}'
           DASHBOARD_REPO: dashboard-repo
           CF_APP_NAME: '{{form.pipeline.parameters.dashboard-app-name}}'
           BACKEND_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
@@ -68,6 +69,7 @@ services:
           $ref: policy-holder.pipeline.yml
           $refType: text
         env:
+          TENANT_ID: '{{form.pipeline.parameters.tenant-id}}'
           POLICY_HOLDER_REPO: policy-holder-repo
           CF_APP_NAME: '{{form.pipeline.parameters.policy-holder-app-name}}'
           BACKEND_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
@@ -86,6 +88,7 @@ services:
           $ref: backend.pipeline.yml
           $refType: text
         env:
+          TENANT_ID: '{{form.pipeline.parameters.tenant-id}}'
           BACKEND_REPO: backend-repo
           CF_APP_NAME: '{{form.pipeline.parameters.backend-app-name}}'
           STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
@@ -105,6 +108,7 @@ services:
 form:
   pipeline:
     parameters:
+      tenant-id: 
       staging-space: staging
       dashboard-app-name: '{{services.dashboard-repo.parameters.repo_name}}'
       backend-app-name: '{{services.backend-repo.parameters.repo_name}}'
