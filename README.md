@@ -3,7 +3,7 @@
 #### How to run in IBM Cloud
 - Click the Deploy to IBM Cloud button to create the three applications in the IBM Cloud.  Accept the defaults or edit the name of the toolchain and Git repos/applications/space.  
 - Use the US-South region.  If another region is chosen, edit the `domain` setting in each application's `manifest.yml`. 
-- After the deploy, edit the Dashboard and Policy Holder applications to set the tenant id in `app\config-$ENV.js`, where `$ENV` is the environment variable which defaults to `staging`.
+- Enter the tenant id provided to you by IBM in the Delivery Pipeline section
 
 ##### Deploy through IBM Cloud Continuous Delivery
 
