@@ -13,10 +13,10 @@ stages:
         artifact_dir: ''
         build_type: shell
         script: |
-        #!/bin/bash
-        export PATH=/opt/IBM/node-v6.7.0/bin:$PATH
-        npm install
-        node_modules/bower/bin/bower install
+          #!/bin/bash
+          export PATH=/opt/IBM/node-v6.7.0/bin:$PATH
+          npm install
+          node_modules/bower/bin/bower install
   - name: Deploy Stage
     inputs:
       - type: job
