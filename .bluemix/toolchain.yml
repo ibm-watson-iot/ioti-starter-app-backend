@@ -39,9 +39,6 @@ services:
           STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
           STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
           STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
-          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
-          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
-          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
         execute: true
   backend-repo:
     service_id: hostedgit
@@ -77,9 +74,6 @@ services:
           STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
           STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
           STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
-          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
-          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
-          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
         execute: true
   backend-build:
     service_id: pipeline
@@ -97,9 +91,6 @@ services:
           STAGING_SPACE_NAME: '{{form.pipeline.parameters.staging-space}}'
           STAGING_ORG_NAME: '{{form.pipeline.parameters.staging-organization}}'
           STAGING_REGION_ID: '{{form.pipeline.parameters.staging-region}}'
-          PROD_SPACE_NAME: '{{form.pipeline.parameters.prod-space}}'
-          PROD_ORG_NAME: '{{form.pipeline.parameters.prod-organization}}'
-          PROD_REGION_ID: '{{form.pipeline.parameters.prod-region}}'
         execute: true
   dashboard-repo:
     service_id: hostedgit
@@ -115,7 +106,6 @@ form:
   pipeline:
     parameters:
       staging-space: staging
-      prod-space: prod
       dashboard-app-name: '{{services.dashboard-repo.parameters.repo_name}}'
       backend-app-name: '{{services.backend-repo.parameters.repo_name}}'
       policy-holder-app-name: '{{services.policy-holder-repo.parameters.repo_name}}'
