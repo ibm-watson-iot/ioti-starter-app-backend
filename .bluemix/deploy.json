@@ -26,17 +26,13 @@
             "description": "The bluemix space",
             "type": "string"
         },
-        "prod-region": {
-            "description": "The bluemix region",
-            "type": "string"
-        },
-        "prod-organization": {
-            "description": "The bluemix org",
-            "type": "string"
-        },
-        "prod-space": {
-            "description": "The bluemix space",
-            "type": "string"
+        "tenant-id": {
+           "description": {
+                "$ref": "#/messages/deploy.tenantDescription"
+            },
+           "type": "string",
+           "pattern": "\\S",
+           "maxLength": 63
         },
         "dashboard-app-name": {
             "description": {
@@ -67,9 +63,7 @@
         "staging-region",
         "staging-organization",
         "staging-space",
-        "prod-region",
-        "prod-organization",
-        "prod-space",
+        "tenant-id",
         "dashboard-app-name",
         "backend-app-name",
         "policy-holder-app-name"
@@ -78,6 +72,14 @@
         {
             "type": "validator",
             "url": "/devops/setup/bm-helper/helper.html"
+        },
+        {
+            "type": "text",
+            "readonly": false,
+            "title": {
+                "$ref": "#/messages/deploy.tenantId"
+            },
+            "key": "tenant-id"
         },
         {
             "type": "text",
@@ -154,25 +156,6 @@
                     "key": "staging-space",
                     "readonly": false
                 },
-                {
-                    "type": "label",
-                    "title": {
-                        "$ref": "#/messages/prodStage"
-                    }
-                },
-                {
-                    "type": "select",
-                    "key": "prod-region"
-                },
-                {
-                    "type": "select",
-                    "key": "prod-organization"
-                },
-                {
-                    "type": "select",
-                    "key": "prod-space",
-                    "readonly": false
-                }
             ]
         }
     ]
