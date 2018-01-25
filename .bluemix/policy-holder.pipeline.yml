@@ -47,7 +47,7 @@ stages:
       #!/bin/bash
       #Need to set node version for brunch to work
       export PATH=/opt/IBM/node-v6.7.0/bin:$PATH
-      sed -i "s/[<]backendhost[>]:[<]port[>]/${BACKEND_APP_NAME}.mybluemix.net/g" app/config-${ENV}.js
+      sed -i "s/[<]iot4i-starter-backend-hostname[>]/${BACKEND_APP_NAME}.mybluemix.net/g" app/config-${ENV}.js
       sed -i "s/[<]tenantid[>]/${TENANT_ID}/g" app/config-${ENV}.js
       sed -i "s/iot4i-starter-app/${CF_APP}/g" manifest.yml
       #brunch after seds
