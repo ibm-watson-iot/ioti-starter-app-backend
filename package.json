@@ -23,7 +23,7 @@
     "body-parser": "^1.17.1",
     "boom": "^4.2.0",
     "cfenv": "^1.0.4",
-    "cloudant": "^1.4.1",
+    "cloudant": "~1.7.1",
     "express": "^4.12.3",
     "jsonschema": "^1.1.1",
     "lodash": "^4.17.2",
