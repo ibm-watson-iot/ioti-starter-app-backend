@@ -27,7 +27,7 @@ stages:
         script: |-
           #!/bin/bash
           sed -i  "s/myenv/${ENV}/g" manifest.yml
-          cp config/config-template.json config/config-${ENV}.json
+          mv config/config-template.json config/config-${ENV}.json
           cf create-service cloudantNoSQLDB Lite iot4i-starter-cloudantNoSQLDB
           cf push "${CF_APP}" --no-start
           cf bind-service "${CF_APP}" iot4i-starter-cloudantNoSQLDB
