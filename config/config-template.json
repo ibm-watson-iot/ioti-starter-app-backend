@@ -1,4 +1,6 @@
 {
+  "introspectUrl": "",
+  "delegetedAuthScope": "dashboard",
   "actions": {
     "email": {
       "service": "",
