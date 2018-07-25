@@ -1,6 +1,6 @@
 {
   "introspectUrl": "",
-  "delegetedAuthScope": "dashboard",
+  "delegatedAuthScope": "dashboard",
   "actions": {
     "email": {
       "service": "",
