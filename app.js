@@ -2,7 +2,7 @@
 
 /*******************************************************************************
  * Licensed Materials - Property of IBM
- * © Copyright IBM Corporation 2017. All Rights Reserved.
+ * © Copyright IBM Corporation 2017, 2018. All Rights Reserved.
  *
  * Note to U.S. Government Users Restricted Rights:
  * Use, duplication or disclosure restricted by GSA ADP Schedule
@@ -12,6 +12,7 @@
 const uuidV4 = require('uuid/v4');
 const express = require('express');
 const bodyParser = require('body-parser');
+const request = require('request');
 
 const setup = require('./src/utils/setup');
 const logger = require('./src/utils/logger');
@@ -60,6 +61,50 @@ app.use((req, res, next) => {
     'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
   next();
 });
+
+// Using iot4i delegated auth for authentication
+app.use((req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    res.status(401).send('No Authorization header');
+    return;
+  }
+  const headerParts = authHeader.split(' ');
+  if (headerParts.length !== 2) {
+    res.status(401).send('Invalid Authorization header');
+    return;
+  }
+  if (headerParts[0] !== 'Bearer') {
+    res.status(401).send('Expects a Bearer token');
+    return;
+  }
+
+  const introspectUrl = appConfig.introspectUrl;
+  const scope = appConfig.delegatedAuthScope; // Custom scope - access control through iot4i roles
+  if (!introspectUrl || !scope) {
+    res.status(500).send('Application not correctly configured. Missing introspectUrl and/or delegated auth scope');
+    return;
+  }
+
+  request.post({
+    uri: introspectUrl,
+    json: true,
+    form: {
+      token: headerParts[1],
+      scope: scope,
+    },
+  }, function(err, httpResponse, body) {
+    if (err) {
+      console.error('Introspect error: %j', err);
+      res.status(401).send('Error when authenticating');
+    } else if (httpResponse.statusCode === 200 && body.active === true) {
+      next();
+    } else {
+      res.status(401).send(body && body.reason ? body.reason : 'Invalid token');
+    }
+  });
+});
+
 
 const apiRouter = express.Router();
 app.use('/api/v1', apiRouter);
