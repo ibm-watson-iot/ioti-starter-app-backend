@@ -59,7 +59,12 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers',
     'Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With');
-  next();
+
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  } else {
+    next();
+  }
 });
 
 // Using iot4i delegated auth for authentication
