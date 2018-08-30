@@ -28,6 +28,7 @@ class ClaimController extends BaseController {
     router.get(this.basePath, this.list.bind(this));
     router.get(this.basePath + '/:claimId', this.get.bind(this));
     router.post(this.basePath, this.create.bind(this));
+    router.post(this.basePath + '/:claimId', this.update.bind(this));
     router.put(this.basePath + '/:claimId', this.update.bind(this));
     router.delete(this.basePath + '/:claimId', this.delete.bind(this));
   }
@@ -35,7 +36,7 @@ class ClaimController extends BaseController {
   list(req, res) {
     const tid = uuidV4();
     const method = 'ClaimController.list';
-    const user = undefined;
+    const user = req.user;
     const queryOptions = {};
     queryOptions.skip = req.query.skip;
     queryOptions.limit = req.query.limit;

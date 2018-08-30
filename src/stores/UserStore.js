@@ -23,8 +23,9 @@ class UserStore extends BaseStore {
     var trimmedUser = {
       _id: user._id,
       _rev: user._rev,
-      name: user.name ? user.name : decodeURIComponent(user.cn),
+      name: user.name ? user.name : (user.cn ? decodeURIComponent(user.cn) : undefined),
       email: user.email ? user.email : user.emailAddress,
+      accessLevel: user.accessLevel,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       address: user.address
@@ -51,15 +52,13 @@ class UserStore extends BaseStore {
 
     var userInfo = this.transformUser(documentToUpdate);
 
-    return super.get(tid, documentToUpdate._id).then( (document) => {
-      document.name = userInfo.name ? userInfo.name : document.name;
-      document.email = userInfo.email ? userInfo.email : document.email
-      document.address = userInfo.address ? userInfo.address : document.address;
-
-      return document;
-    }).then( (documentToUpdateTrimmed) => {
+    return super.get(tid, documentToUpdate._id)
+      .then((document) => {
+        return Object.assign(document, userInfo);
+      })
+      .then((documentToUpdateTrimmed) => {
         return super.update(tid, documentToUpdateTrimmed);
-    });
+      });
   }
 
   get(tid, documentId) {
