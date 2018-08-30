@@ -20,9 +20,9 @@ class BaseController {
     this.service = service;
   }
 
-  isAdmin(req) {
+  isAdmin(req, method) {
     const user = req.user;
-    if (req.scopes.includes('admin') || req.scopes.includes('admin:write:' + this.service.docType)) {
+    if (req.scopes.includes('admin') || req.scopes.includes(`admin:${method}:${this.service.docType}`)) {
       return Promise.resolve(true);
     }
     return this.service.get('', user, user)
@@ -41,14 +41,14 @@ class BaseController {
     this.service.get(tid, user, docId)
       .then((results) => {
         if (user !== docId && user !== results.userId) {
-          return this.isAdmin(req).then((ok) => ok ? results : false);
+          return this.isAdmin(req, 'read').then(ok => ok ? results : false);
         }
         return results;
       })
       .then((results) => {
         if (!results) {
-          res.send(403, {message: 'You need admin rights'});
-          return
+          res.send(403, { message: 'You need admin rights' });
+          return;
         }
         res.send(results);
       })
@@ -60,7 +60,7 @@ class BaseController {
         } else {
           res.status(500).json({ statusCode: 500, error: 'Internal Server Error' });
         }
-    });
+      });
   }
 
   list(req, res) {
@@ -95,16 +95,16 @@ class BaseController {
     const doc = req.body;
     logger.info(tid, method, 'Access to POST', req.originalUrl);
 
-    this.isAdmin(req)
+    this.isAdmin(req, 'write')
       .then((isAdmin) => {
         if (!isAdmin) {
-          return
+          return null;
         }
         return this.service.create(tid, user, doc);
       })
       .then((result) => {
         if (!result) {
-          res.send(403, {message: 'You need admin rights'});
+          res.send(403, { message: 'You need admin rights' });
           return;
         }
         res.status(201).send(result);
@@ -117,7 +117,7 @@ class BaseController {
         } else {
           res.status(500).json({ statusCode: 500, error: 'Internal Server Error' });
         }
-    });
+      });
   }
 
   update(req, res) {
@@ -132,14 +132,14 @@ class BaseController {
     this.service.get(tid, user, docId)
       .then((results) => {
         if (user !== docId && user !== results.userId) {
-          return this.isAdmin(req).then((ok) => ok ? results : false);
+          return this.isAdmin(req, 'write').then(ok => ok ? results : false);
         }
         return results;
       })
       .then((results) => {
         if (!results) {
-          res.send(403, {message: 'You need admin rights'});
-          return
+          res.send(403, { message: 'You need admin rights' });
+          return;
         }
         return this.service.update(tid, user, doc).then((result) => {
           res.send(result);
@@ -168,18 +168,18 @@ class BaseController {
     this.service.get(tid, user, docId)
       .then((results) => {
         if (user !== docId && user !== results.userId) {
-          return this.isAdmin(req).then((ok) => ok ? results : false);
+          return this.isAdmin(req, 'write').then(ok => ok ? results : false);
         }
         return results;
       })
       .then((results) => {
         if (!results) {
-          res.send(403, {message: 'You need admin rights'});
-          return
+          res.send(403, { message: 'You need admin rights' });
+          return null;
         }
-        return this.service.save(tid, user, docToSave).then((results) => {
-          res.send(results);
-        })
+        return this.service.save(tid, user, docToSave).then((res) => {
+          res.send(res);
+        });
       })
       .catch((err) => {
         if (err.name === CLOUDANT_ERROR) {
@@ -202,14 +202,14 @@ class BaseController {
     this.service.get(tid, user, docId)
       .then((results) => {
         if (this.service.docType === 'user' && user !== results.userId) {
-          return this.isAdmin(req).then((ok) => ok ? results : false);
+          return this.isAdmin(req, 'write').then(ok => ok ? results : false);
         }
         return results;
       })
       .then((results) => {
         if (!results) {
-          res.send(403, {message: 'You need admin rights'});
-          return
+          res.send(403, { message: 'You need admin rights' });
+          return null;
         }
         return this.service.delete(tid, user, docId).then((results) => {
           res.status(202).send(results);

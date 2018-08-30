@@ -43,23 +43,27 @@ class UserController extends BaseController {
     queryOptions.descending = req.query.descending;
     logger.info(tid, method, 'Access to GET', req.originalUrl);
 
-    return this.isAdmin(req).then((ok) => {
+    return this.isAdmin(req, 'read').then((ok) => {
       if (!ok) {
-        return this.service.get(tid, user, user).then((user) => {
-          return {offset:0, limit: 100, totalItems:1, items: [user]};
+        return this.service.get(tid, user, user).then((userDoc) => {
+          return { offset: 0, limit: 100, totalItems: 1, items: [userDoc] };
         });
       }
       return this.service.list(tid, user, queryOptions);
-    }).catch((err) => {
-      console.log(err);
-      if (err.name === CLOUDANT_ERROR) {
-        const error = JSON.parse(err.details.error);
-        error.statusCode = err.details.statusCode;
-        res.status(err.details.statusCode).json(error);
-      } else {
-        res.status(500).json({ statusCode: 500, error: 'Internal Server Error' });
-      }
-    });
+    })
+      .then((results) => {
+        res.send(results);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.name === CLOUDANT_ERROR) {
+          const error = JSON.parse(err.details.error);
+          error.statusCode = err.details.statusCode;
+          res.status(err.details.statusCode).json(error);
+        } else {
+          res.status(500).json({ statusCode: 500, error: 'Internal Server Error' });
+        }
+      });
   }
 
 }
