@@ -103,6 +103,8 @@ app.use((req, res, next) => {
       console.error('Introspect error: %j', err);
       res.status(401).send('Error when authenticating');
     } else if (httpResponse.statusCode === 200 && body.active === true) {
+      req.user = body.sub;
+      req.scopes = (body.scope || '').split(' ');
       next();
     } else {
       res.status(401).send(body && body.reason ? body.reason : 'Invalid token');

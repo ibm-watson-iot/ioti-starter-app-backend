@@ -9,8 +9,12 @@
  * Contract with IBM Corp.
  *******************************************************************************/
 
+const uuidV4 = require('uuid/v4');
+const logger = require('../utils/logger');
 const BaseController = require('./BaseController');
 const UserService = require('../services/UserService');
+
+const CLOUDANT_ERROR = 'CloudantNegativeResponse';
 
 class UserController extends BaseController {
 
@@ -23,9 +27,39 @@ class UserController extends BaseController {
     router.get(this.basePath, this.list.bind(this));
     router.post(this.basePath, this.create.bind(this));
     router.get(this.basePath + '/:userId', this.get.bind(this));
-    router.post(this.basePath + '/:userId', this.update.bind(this));    
+    router.post(this.basePath + '/:userId', this.update.bind(this));
     router.put(this.basePath + '/:userId', this.update.bind(this));
     router.delete(this.basePath + '/:userId', this.delete.bind(this));
+  }
+
+  list(req, res) {
+    const tid = uuidV4();
+    const method = 'UserController.list';
+    const user = req.user;
+    const queryOptions = {};
+    queryOptions.skip = req.query.skip;
+    queryOptions.limit = req.query.limit;
+    queryOptions.includeDocs = req.query.includeDocs;
+    queryOptions.descending = req.query.descending;
+    logger.info(tid, method, 'Access to GET', req.originalUrl);
+
+    return this.isAdmin(req).then((ok) => {
+      if (!ok) {
+        return this.service.get(tid, user, user).then((user) => {
+          return {offset:0, limit: 100, totalItems:1, items: [user]};
+        });
+      }
+      return this.service.list(tid, user, queryOptions);
+    }).catch((err) => {
+      console.log(err);
+      if (err.name === CLOUDANT_ERROR) {
+        const error = JSON.parse(err.details.error);
+        error.statusCode = err.details.statusCode;
+        res.status(err.details.statusCode).json(error);
+      } else {
+        res.status(500).json({ statusCode: 500, error: 'Internal Server Error' });
+      }
+    });
   }
 
 }
