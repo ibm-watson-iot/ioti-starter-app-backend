@@ -21,8 +21,9 @@ class UserController extends BaseController {
     this.basePath = '/' + service.docType + 's';
 
     router.get(this.basePath, this.list.bind(this));
-    router.get(this.basePath + '/:userId', this.get.bind(this));
     router.post(this.basePath, this.create.bind(this));
+    router.get(this.basePath + '/:userId', this.get.bind(this));
+    router.post(this.basePath + '/:userId', this.update.bind(this));    
     router.put(this.basePath + '/:userId', this.update.bind(this));
     router.delete(this.basePath + '/:userId', this.delete.bind(this));
   }
