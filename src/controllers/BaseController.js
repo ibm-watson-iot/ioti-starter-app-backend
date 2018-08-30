@@ -22,7 +22,7 @@ class BaseController {
 
   isAdmin(req) {
     const user = req.user;
-    if (req.scopes.includes('admin') || req.includes('admin:write:' + this.service.docType)) {
+    if (req.scopes.includes('admin') || req.scopes.includes('admin:write:' + this.service.docType)) {
       return Promise.resolve(true);
     }
     return this.service.get('', user, user)
